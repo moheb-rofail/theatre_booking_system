@@ -10,6 +10,7 @@ Route::post('/bookings', [BookingController::class, 'store']);
 Route::put('/bookings/{id}', [BookingController::class, 'update']);
 Route::delete('/bookings/{id}', [BookingController::class, 'destroy']);
 
+Route::get('/booked_seats/{party_date}/{party_number}', [BookingController::class, 'booked_seats']);
 
 
 /// route special for admin to store movies data

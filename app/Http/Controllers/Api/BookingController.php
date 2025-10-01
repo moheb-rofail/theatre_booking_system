@@ -8,10 +8,20 @@ use Illuminate\Http\Request;
 use App\Http\Requests\BookingRequest;
 use App\Models\Movie;
 
+use Illuminate\Support\Facades\DB;
+
 class BookingController extends Controller
 {
     function index() {
         return Booking::orderBy('id','DESC')->latest()->paginate(10);
+    }
+
+    function booked_seats($party_date, $party_number){
+        $booked_seats = DB::table('bookings')
+        ->where('party_date','=', $party_date)
+        ->where('party_number', '=', $party_number)
+        ->pluck('seat_number');
+        return $booked_seats;
     }
 
     // show and edit
