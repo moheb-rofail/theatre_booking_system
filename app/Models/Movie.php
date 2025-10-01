@@ -13,4 +13,8 @@ class Movie extends Model
         'TypeOfFilm',
         'duration',
     ];
+
+    public function bookings() {
+        return $this->hasMany(Booking::class);
+    }
 }

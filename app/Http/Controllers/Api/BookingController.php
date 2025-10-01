@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
-use Illuminate\Http\Request;
 use App\Http\Requests\BookingRequest;
-use App\Models\Movie;
 
 use Illuminate\Support\Facades\DB;
 
@@ -14,14 +12,6 @@ class BookingController extends Controller
 {
     function index() {
         return Booking::orderBy('id','DESC')->latest()->paginate(10);
-    }
-
-    function booked_seats($party_date, $party_number){
-        $booked_seats = DB::table('bookings')
-        ->where('party_date','=', $party_date)
-        ->where('party_number', '=', $party_number)
-        ->pluck('seat_number');
-        return $booked_seats;
     }
 
     // show and edit
@@ -59,46 +49,12 @@ class BookingController extends Controller
         return "updating was successful";
     }
 
-
-
-    // store movies data  by admin
-    public function storeMovie(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'poster' => 'nullable|image',
-            'TypeOfFilm' => 'required|string',
-            'duration' => 'required|string|min:1',
-        ]);
-
-        if ($request->hasFile('poster')) {
-            $posterPath = $request->file('poster')->store('posters', 'public');
-        } else {
-            return response()->json(['message' => 'Poster is required'], 422);
-        }
-
-        // Create movie
-        $movie = Movie::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'poster' => $posterPath,
-            'TypeOfFilm' => $request->TypeOfFilm,
-            'duration' => $request->duration,
-        ]);
-
-        // Response
-        return response()->json([
-            'message' => 'Movie created successfully',
-            'movie' => $movie
-        ], 201);
+    function booked_seats($party_date, $party_number){
+        $booked_seats = DB::table('bookings')
+        ->where('party_date','=', $party_date)
+        ->where('party_number', '=', $party_number)
+        ->pluck('seat_number');
+        return $booked_seats;
     }
 
-
-    // get all movies data to show in user side (home page for user)
-    public function getMovies()
-    {
-        $movies = Movie::orderBy('id', 'DESC')->get();
-        return response()->json($movies);
-    }
 }
