@@ -5,18 +5,25 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Http\Requests\BookingRequest;
-
 use Illuminate\Support\Facades\DB;
+use App\Models\Movie;
 
 class BookingController extends Controller
 {
-    function index() {
-        return Booking::orderBy('id','DESC')->latest()->paginate(10);
+    public function index() {
+        $movies = Movie::orderBy('id','DESC')->get();
+        $movies->map(function($movie) {
+            $movie->poster = asset('storage/posters/' . basename($movie->poster));
+            return $movie;
+        });
+        return response()->json(['data' => $movies]);
     }
+
 
     // show and edit
     function show(string $id) {
-        return Booking::find($id);
+        // return Booking::find($id);
+        return Movie::find($id);
     }
 
     function destroy($id) {
