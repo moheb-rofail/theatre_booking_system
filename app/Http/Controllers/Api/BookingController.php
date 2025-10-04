@@ -32,20 +32,25 @@ class BookingController extends Controller
     }
 
     function store(BookingRequest $request){
+        //dd($request->all());
         $booking = new Booking();
-        $booking->id = $request->id;
+        $booking->movie_id = $request->movie_id;
         $booking->user_id = $request->user_id;
         $booking->seat_number = $request->seat_number;
         $booking->party_date = $request->party_date;
         $booking->party_number = $request->party_number;
         $booking->price = $request->price;
         $booking->save();
-        return "inserting was successful";
+        return response()->json([
+            'message' => 'Inserting was successful',
+            'booking' => $booking
+        ], 201);
     }
 
     function update(BookingRequest $request, string $id){
         $booking = Booking::find($id);
         $booking->user_id = $request->user_id;
+        $booking->movie_id = $request->movie_id;
         $booking->seat_number = $request->seat_number;
         $booking->party_date = $request->party_date;
         $booking->party_number = $request->party_number;
