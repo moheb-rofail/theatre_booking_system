@@ -23,12 +23,11 @@ class BookingController extends Controller
     // show and edit
     function show(string $id) {
         // return Booking::find($id);
-        return Movie::find($id);
+        return Booking::find($id);
     }
 
     function destroy($id) {
-        $booking = Booking::find($id);
-        $booking->delete();
+        Booking::find($id)->delete();
         return 'deleted successfully';
     }
 
