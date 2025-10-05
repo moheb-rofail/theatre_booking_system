@@ -20,3 +20,8 @@ Route::delete('/movies/{id}', [MovieController::class, 'destroy']);
 
 // Admin
 Route::post('/settings', [ValueController::class, 'update']);
+
+Route::get('/settings', [ValueController::class, 'index']);
+Route::get('/settings/{id}', [ValueController::class, 'show']);
+Route::post('/settings',  [ValueController::class, 'update']);
+Route::delete('/settings/{id}', [ValueController::class, 'destroy']);

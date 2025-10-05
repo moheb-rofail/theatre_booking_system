@@ -11,18 +11,17 @@ use App\Models\Movie;
 class BookingController extends Controller
 {
     public function index() {
-        $movies = Movie::orderBy('id','DESC')->get();
-        $movies->map(function($movie) {
-            $movie->poster = asset('storage/posters/' . basename($movie->poster));
-            return $movie;
-        });
-        return response()->json(['data' => $movies]);
+        $bookings = Booking::all();
+        return $bookings;
     }
 
+    public function userBookings($user_id){
+        $bookings = Booking::where('user_id', '=', $user_id);
+        return $bookings;
+    }
 
     // show and edit
     function show(string $id) {
-        // return Booking::find($id);
         return Booking::find($id);
     }
 
@@ -32,7 +31,6 @@ class BookingController extends Controller
     }
 
     function store(BookingRequest $request){
-        //dd($request->all());
         $booking = new Booking();
         $booking->movie_id = $request->movie_id;
         $booking->user_id = $request->user_id;
