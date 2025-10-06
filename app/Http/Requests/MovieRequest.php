@@ -24,9 +24,9 @@ class MovieRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'poster' => 'nullable|image',
+            //'poster' => 'nullable|image',
             'TypeOfFilm' => 'required|string',
-            'duration' => 'required|string|min:1',
+            'duration' => 'required|min:1',
         ];
     }
 }

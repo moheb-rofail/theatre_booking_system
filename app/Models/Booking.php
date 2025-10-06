@@ -9,4 +9,8 @@ class Booking extends Model
     public function movies() {
         return $this->hasMany(Movie::class);
     }
+
+    public function users() {
+        return $this->hasMany(User::class);
+    }
 }

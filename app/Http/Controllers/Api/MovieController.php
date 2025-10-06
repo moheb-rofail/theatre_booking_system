@@ -23,17 +23,18 @@ class MovieController extends Controller
      */
     public function store(MovieRequest $request)
     {
-        if ($request->hasFile('poster')) {
-            $posterPath = $request->file('poster')->store('posters', 'public');
-        } else {
-            return response()->json(['message' => 'Poster is required'], 422);
-        }
+        //return response()->json(['message'=>'great']);
+        // if ($request->hasFile('poster')) {
+        //     $posterPath = $request->file('poster')->store('posters', 'public');
+        // } else {
+        //     return response()->json(['message' => 'Poster is required'], 422);
+        // }
 
         // Create movie
         $movie = Movie::create([
             'title' => $request->title,
             'description' => $request->description,
-            'poster' => $posterPath,
+            //'poster' => $posterPath,
             'TypeOfFilm' => $request->TypeOfFilm,
             'duration' => $request->duration,
         ]);

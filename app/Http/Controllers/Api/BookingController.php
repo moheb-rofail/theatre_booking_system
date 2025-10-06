@@ -16,7 +16,7 @@ class BookingController extends Controller
     }
 
     public function userBookings($user_id){
-        $bookings = Booking::where('user_id', '=', $user_id);
+        $bookings = Booking::where('user_id', '=', $user_id)->with('users');
         return $bookings;
     }
 
