@@ -11,6 +11,7 @@ class ValueController extends Controller
 {
     public function index(){
         $values = Value::all();
+        return response()->json(['message'=>'message', 'values'=>$values]);
     }
 
     public function update(Request $request) {

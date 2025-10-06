@@ -54,14 +54,13 @@ class BookingController extends Controller
         $booking->party_number = $request->party_number;
         $booking->price = $request->price;
         $booking->save();
-        //Booking::find($id)->update($booking);
         return "updating was successful";
     }
 
-    function booked_seats($party_date, $party_number){
+    function booked_seats($party_date, $movie_id){
         $booked_seats = DB::table('bookings')
         ->where('party_date','=', $party_date)
-        ->where('party_number', '=', $party_number)
+        ->where('movie_id', '=', $movie_id)
         ->pluck('seat_number');
         return $booked_seats;
     }
