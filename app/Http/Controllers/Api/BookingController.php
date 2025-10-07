@@ -11,7 +11,8 @@ use App\Models\Movie;
 class BookingController extends Controller
 {
     public function index() {
-        $bookings = Booking::all();
+        // return $bookings = Booking::all();
+        $bookings = Booking::with('user','movie')->get();
         return $bookings;
     }
 
@@ -25,10 +26,21 @@ class BookingController extends Controller
         return Booking::find($id);
     }
 
-    function destroy($id) {
-        Booking::find($id)->delete();
-        return 'deleted successfully';
+    function destroy($id){
+        $booking = Booking::find($id);
+        if (!$booking) {
+            return response()->json([
+                'message' => 'Booking not found'
+            ], 404);
+        }
+
+        $booking->delete();
+
+        return response()->json([
+            'message' => 'Booking deleted successfully'
+        ], 200);
     }
+
 
     function store(BookingRequest $request){
         $booking = new Booking();
