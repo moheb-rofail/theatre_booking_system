@@ -22,9 +22,12 @@ class BookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "price"=> ["gt:0","integer","required"],
+            "price"=> ["numeric", "gt:0", 'required'],
             "user_id" => ["integer", "gt:0", 'required'],
             "seat_number" => ["integer", "gt:0", 'required'],
+            "movie_id" => ["integer", "gt:0", 'required'],
+            "party_date" => ["date", 'required'],
+            "party_number" => ["string", 'required'],
         ];
     }
 }

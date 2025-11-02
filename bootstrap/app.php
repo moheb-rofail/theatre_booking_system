@@ -13,14 +13,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up'
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Apply Sanctum middleware conditionally
         $middleware->api(prepend: [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
 
         $middleware->alias([
-        'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
-            'admin' => \App\Http\Middleware\AdminMiddleWare::class,
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
 
         // ✅ هنا بنضيف الـ CORS Middleware

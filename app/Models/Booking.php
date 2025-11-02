@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
+    protected $fillable = [
+        'movie_id',
+        'user_id',
+        'seat_number',
+        'party_date',
+        'party_number',
+        'price'
+    ];
+
     public function movie() {
         // return $this->hasMany(Movie::class);
         return $this->belongsTo(Movie::class);

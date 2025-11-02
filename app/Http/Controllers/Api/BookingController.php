@@ -43,6 +43,19 @@ class BookingController extends Controller
 
 
     function store(BookingRequest $request){
+        // Check if seat is already booked for this movie and date
+        $existingBooking = Booking::where('movie_id', $request->movie_id)
+            ->where('party_date', $request->party_date)
+            ->where('seat_number', $request->seat_number)
+            ->first();
+            
+        if ($existingBooking) {
+            return response()->json([
+                'message' => 'Seat is already booked',
+                'error' => 'This seat is already reserved for the selected show'
+            ], 409);
+        }
+        
         $booking = new Booking();
         $booking->movie_id = $request->movie_id;
         $booking->user_id = $request->user_id;
@@ -51,8 +64,9 @@ class BookingController extends Controller
         $booking->party_number = $request->party_number;
         $booking->price = $request->price;
         $booking->save();
+        
         return response()->json([
-            'message' => 'Inserting was successful',
+            'message' => 'Booking created successfully',
             'booking' => $booking
         ], 201);
     }
@@ -71,10 +85,11 @@ class BookingController extends Controller
 
     function booked_seats($party_date, $movie_id){
         $booked_seats = DB::table('bookings')
-        ->where('party_date','=', $party_date)
-        ->where('movie_id', '=', $movie_id)
-        ->pluck('seat_number');
-        return $booked_seats;
+            ->where('party_date', '=', $party_date)
+            ->where('movie_id', '=', $movie_id)
+            ->pluck('seat_number')
+            ->toArray();
+        return response()->json($booked_seats);
     }
 
 }

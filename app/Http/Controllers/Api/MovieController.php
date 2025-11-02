@@ -13,9 +13,20 @@ class MovieController extends Controller
      */
     public function index()
     {
-        $movies = Movie::orderBy('id', 'DESC')->get();
-        //return response()->json($movies);
-        return $movies;
+        try {
+            $movies = Movie::orderBy('id', 'DESC')->get();
+            return response()->json($movies, 200, [
+                'Content-Type' => 'application/json',
+                'Access-Control-Allow-Origin' => '*',
+                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to fetch movies',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -23,27 +34,33 @@ class MovieController extends Controller
      */
     public function store(MovieRequest $request)
     {
-        //return response()->json(['message'=>'great']);
-        // if ($request->hasFile('poster')) {
-        //     $posterPath = $request->file('poster')->store('posters', 'public');
-        // } else {
-        //     return response()->json(['message' => 'Poster is required'], 422);
-        // }
+        try {
+            $posterPath = null;
+            
+            if ($request->hasFile('poster')) {
+                $posterPath = $request->file('poster')->store('posters', 'public');
+            }
 
-        // Create movie
-        $movie = Movie::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            //'poster' => $posterPath,
-            'TypeOfFilm' => $request->TypeOfFilm,
-            'duration' => $request->duration,
-        ]);
+            // Create movie
+            $movie = Movie::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'poster' => $posterPath,
+                'TypeOfFilm' => $request->TypeOfFilm,
+                'duration' => $request->duration,
+            ]);
 
-        // Response
-        return response()->json([
-            'message' => 'Movie created successfully',
-            'movie' => $movie
-        ], 201);
+            // Response
+            return response()->json([
+                'message' => 'Movie created successfully',
+                'movie' => $movie
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to create movie',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -51,7 +68,11 @@ class MovieController extends Controller
      */
     public function show(string $id)
     {
-        return Movie::find($id);
+        $movie = Movie::find($id);
+        if (!$movie) {
+            return response()->json(['message' => 'Movie not found'], 404);
+        }
+        return response()->json($movie);
     }
 
 
