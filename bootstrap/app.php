@@ -13,18 +13,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up'
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Apply Sanctum middleware conditionally
-        $middleware->api(prepend: [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-        ]);
-
+        // Remove EnsureFrontendRequestsAreStateful from API routes to disable CSRF requirement
+        // This allows token-based authentication (Bearer tokens) without CSRF tokens
+        // If you need stateful authentication for specific routes, use 'auth:sanctum' middleware on those routes
+        
         $middleware->alias([
             'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
 
-        // ✅ هنا بنضيف الـ CORS Middleware
+        // CORS Middleware - allows cross-origin requests from Angular frontend
         $middleware->prepend(HandleCors::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
